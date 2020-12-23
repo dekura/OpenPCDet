@@ -1,4 +1,5 @@
 import mayavi.mlab as mlab
+mlab.options.offscreen = True
 import numpy as np
 import torch
 

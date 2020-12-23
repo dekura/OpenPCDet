@@ -1,17 +1,26 @@
-import argparse
+import os
 import glob
-from pathlib import Path
-
-import mayavi.mlab as mlab
-import numpy as np
 import torch
+import pickle
+import shutil
+import argparse
+
+import numpy as np
+
+from tqdm import tqdm
+from pathlib import Path
 
 from pcdet.config import cfg, cfg_from_yaml_file
 from pcdet.datasets import DatasetTemplate
 from pcdet.models import build_network, load_data_to_gpu
 from pcdet.utils import common_utils
-from visual_utils import visualize_utils as V
 
+if os.name == 'posix' and "DISPLAY" not in os.environ:
+    headless_server = True
+else:
+    headless_server = False
+    from visual_utils import visualize_utils as V
+    import mayavi.mlab as mlab
 
 class DemoDataset(DatasetTemplate):
     def __init__(self, dataset_cfg, class_names, training=True, root_path=None, logger=None, ext='.bin'):
@@ -61,6 +70,8 @@ def parse_config():
                         help='specify the point cloud data file or directory')
     parser.add_argument('--ckpt', type=str, default=None, help='specify the pretrained model')
     parser.add_argument('--ext', type=str, default='.bin', help='specify the extension of your point cloud data file')
+    parser.add_argument('--output', type=str, default=None, help='the output folder')
+
 
     args = parser.parse_args()
 
@@ -72,6 +83,7 @@ def parse_config():
 def main():
     args, cfg = parse_config()
     logger = common_utils.create_logger()
+    export_dir = args.output
     logger.info('-----------------Quick Demo of OpenPCDet-------------------------')
     demo_dataset = DemoDataset(
         dataset_cfg=cfg.DATA_CONFIG, class_names=cfg.CLASS_NAMES, training=False,
@@ -90,11 +102,37 @@ def main():
             load_data_to_gpu(data_dict)
             pred_dicts, _ = model.forward(data_dict)
 
-            V.draw_scenes(
-                points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
-                ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels']
-            )
-            mlab.show(stop=True)
+            if headless_server:
+
+                # image_name = demo_dataset.sample_file_list[idx].split('/')[-1].replace(demo_dataset.ext, '.png')
+                # image_source_path = image_path / image_name
+
+                # if args.copy_image and image_source_path.exists():
+                #     image_destination_path = export_dir / image_name
+                #     shutil.copyfile(image_source_path, image_destination_path)
+
+                data_dict_cpu = {}
+
+                for key, value in data_dict.items():
+                    if key == 'points':
+                        data_dict_cpu[key] = value.cpu().numpy()
+
+                with open(f'{export_dir}/data_dict_{idx+1:06d}.pkl', 'wb') as f:
+                    pickle.dump(data_dict_cpu, f, pickle.HIGHEST_PROTOCOL)
+
+                for pred_dict in pred_dicts:
+                    for key, value in pred_dict.items():
+                        if isinstance(pred_dict[key], torch.Tensor):
+                            pred_dict[key] = value.cpu().numpy()
+
+                with open(f'{export_dir}/pred_dicts_{idx + 1:06d}.pkl', 'wb') as f:
+                    pickle.dump(pred_dicts, f, pickle.HIGHEST_PROTOCOL)
+            else:
+                V.draw_scenes(
+                    points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
+                    ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels']
+                )
+                mlab.show(stop=True)
 
     logger.info('Demo done.')
 
