@@ -2,7 +2,7 @@
 Author: Guojin Chen @ CUHK-CSE
 Homepage: https://dekura.github.io/
 Date: 2020-12-22 15:54:50
-LastEditTime: 2020-12-23 14:48:47
+LastEditTime: 2020-12-23 17:50:28
 Contact: cgjhaha@qq.com
 Description: viusalize point cloud data
 '''
@@ -203,7 +203,8 @@ def draw_scene(points, gt_boxes=None, ref_boxes=None, ref_scores=None, ref_label
 if __name__ == '__main__':
 
     # import_dir = Path(os.getcwd()).parent.parent / 'output' / 'DEMO' / 'KITTI' / 'pv_rcnn'
-    import_dir = Path('../outputs/')
+    print(os.getcwd())
+    import_dir = '../outputs'
 
     data = []
     for i in os.listdir(import_dir):
@@ -236,13 +237,17 @@ if __name__ == '__main__':
 
         with open(f'{import_dir}/data_dict_{sample_id}.pkl', 'rb') as f:
             data_dict = pickle.load(f)
+            # print(data_dict['points'][0])
 
         with open(f'{import_dir}/pred_dicts_{sample_id}.pkl', 'rb') as f:
             pred_dicts = pickle.load(f)
+            # print(pred_dicts)
+            print(pred_dicts[0]['pred_boxes'][0])
+            print(pred_dicts[0]['pred_scores'][0])
+            print(pred_dicts[0]['pred_labels'][0])
+        # scene = draw_scene(points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
+        #                     ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels'],
+        #                     title=sample_id, confidence=0.6)
 
-        scene = draw_scene(points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
-                            ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels'],
-                            title=sample_id, confidence=0.6)
-
-        mlab.show(stop=False)
+        # mlab.show(stop=False)
         # index += 1 % len(data)
