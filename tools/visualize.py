@@ -2,7 +2,7 @@
 Author: Guojin Chen @ CUHK-CSE
 Homepage: https://dekura.github.io/
 Date: 2020-12-22 15:54:50
-LastEditTime: 2020-12-22 16:16:35
+LastEditTime: 2020-12-23 14:48:47
 Contact: cgjhaha@qq.com
 Description: viusalize point cloud data
 '''
@@ -203,7 +203,7 @@ def draw_scene(points, gt_boxes=None, ref_boxes=None, ref_scores=None, ref_label
 if __name__ == '__main__':
 
     # import_dir = Path(os.getcwd()).parent.parent / 'output' / 'DEMO' / 'KITTI' / 'pv_rcnn'
-    import_dir = Path('/Users/dekura/chen/bei/projects/pchsd/OpenPCDet/outputs')
+    import_dir = Path('../outputs/')
 
     data = []
     for i in os.listdir(import_dir):
@@ -244,5 +244,5 @@ if __name__ == '__main__':
                             ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels'],
                             title=sample_id, confidence=0.6)
 
-        mlab.show(stop=True)
+        mlab.show(stop=False)
         # index += 1 % len(data)
