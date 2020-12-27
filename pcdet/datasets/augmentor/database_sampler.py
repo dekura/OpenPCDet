@@ -63,9 +63,11 @@ class DataBaseSampler(object):
         for name_num in min_gt_points_list:
             name, min_num = name_num.split(':')
             min_num = int(min_num)
+            # print(db_infos)
             if min_num > 0 and name in db_infos.keys():
                 filtered_infos = []
                 for info in db_infos[name]:
+                    print('num_points_in_gt: ', info['num_points_in_gt'])
                     if info['num_points_in_gt'] >= min_num:
                         filtered_infos.append(info)
 
@@ -85,6 +87,7 @@ class DataBaseSampler(object):
 
         """
         sample_num, pointer, indices = int(sample_group['sample_num']), sample_group['pointer'], sample_group['indices']
+        # print(self.db_infos)
         if pointer >= len(self.db_infos[class_name]):
             indices = np.random.permutation(len(self.db_infos[class_name]))
             pointer = 0
@@ -174,8 +177,10 @@ class DataBaseSampler(object):
                 num_gt = np.sum(class_name == gt_names)
                 sample_group['sample_num'] = str(int(self.sample_class_num[class_name]) - num_gt)
             if int(sample_group['sample_num']) > 0:
+                # print(class_name)
+                # print(sample_group)
                 sampled_dict = self.sample_with_fixed_number(class_name, sample_group)
-
+                # print(sampled_dict)
                 sampled_boxes = np.stack([x['box3d_lidar'] for x in sampled_dict], axis=0).astype(np.float32)
 
                 if self.sampler_cfg.get('DATABASE_WITH_FAKELIDAR', False):

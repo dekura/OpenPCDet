@@ -2,7 +2,7 @@
 Author: Guojin Chen @ CUHK-CSE
 Homepage: https://dekura.github.io/
 Date: 2020-12-22 15:54:50
-LastEditTime: 2020-12-23 17:50:28
+LastEditTime: 2020-12-23 21:48:05
 Contact: cgjhaha@qq.com
 Description: viusalize point cloud data
 '''
@@ -51,7 +51,7 @@ def rotate_points_along_z(points, angle):
     return points_rot.numpy() if is_numpy else points_rot
 
 def visualize_pts(pts, bgcolor=(0, 0, 0), fgcolor=(1.0, 1.0, 1.0),
-                  color_feature=None, size=(600, 600), draw_origin=True, title=None):
+                  color_feature=None, size=(600, 600), draw_origin=False, title=None):
 
     min_height_mask = pts[:, 2] > -1.5
     pts = pts[min_height_mask, :]
@@ -237,17 +237,18 @@ if __name__ == '__main__':
 
         with open(f'{import_dir}/data_dict_{sample_id}.pkl', 'rb') as f:
             data_dict = pickle.load(f)
+            # print(data_dict)
+            # print(data_dict['points'].shape)
             # print(data_dict['points'][0])
 
         with open(f'{import_dir}/pred_dicts_{sample_id}.pkl', 'rb') as f:
             pred_dicts = pickle.load(f)
             # print(pred_dicts)
-            print(pred_dicts[0]['pred_boxes'][0])
-            print(pred_dicts[0]['pred_scores'][0])
-            print(pred_dicts[0]['pred_labels'][0])
-        # scene = draw_scene(points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
-        #                     ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels'],
-        #                     title=sample_id, confidence=0.6)
+            # print(pred_dicts[0]['pred_boxes'][0])
+            # print(pred_dicts[0]['pred_scores'][0])
+            # print(pred_dicts[0]['pred_labels'][0])
+        scene = draw_scene(points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
+                            ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels'],
+                            title=sample_id, confidence=0.6)
 
-        # mlab.show(stop=False)
-        # index += 1 % len(data)
+        mlab.show(stop=False)

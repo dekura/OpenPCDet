@@ -66,6 +66,7 @@ class KittiDataset(DatasetTemplate):
 
     def get_image_shape(self, idx):
         img_file = self.root_split_path / 'image_2' / ('%s.png' % idx)
+        # print(str(img_file))
         assert img_file.exists()
         return np.array(io.imread(img_file).shape[:2], dtype=np.int32)
 
@@ -430,10 +431,13 @@ if __name__ == '__main__':
         from pathlib import Path
         from easydict import EasyDict
         dataset_cfg = EasyDict(yaml.load(open(sys.argv[2])))
+        print(sys.argv[2])
         ROOT_DIR = (Path(__file__).resolve().parent / '../../../').resolve()
         create_kitti_infos(
             dataset_cfg=dataset_cfg,
-            class_names=['Car', 'Pedestrian', 'Cyclist'],
-            data_path=ROOT_DIR / 'data' / 'kitti',
-            save_path=ROOT_DIR / 'data' / 'kitti'
+            # class_names=['Car', 'Pedestrian', 'Cyclist'],
+            class_names=['Car'],
+            data_path=ROOT_DIR / 'data' / 'hsd_kitti',
+            save_path=ROOT_DIR / 'data' / 'hsd_kitti',
+            workers=1
         )
