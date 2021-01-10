@@ -2,7 +2,7 @@
 Author: Guojin Chen @ CUHK-CSE
 Homepage: https://dekura.github.io/
 Date: 2020-12-22 15:54:50
-LastEditTime: 2020-12-23 21:48:05
+LastEditTime: 2021-01-07 16:48:19
 Contact: cgjhaha@qq.com
 Description: viusalize point cloud data
 '''
@@ -204,7 +204,7 @@ if __name__ == '__main__':
 
     # import_dir = Path(os.getcwd()).parent.parent / 'output' / 'DEMO' / 'KITTI' / 'pv_rcnn'
     print(os.getcwd())
-    import_dir = '../outputs'
+    import_dir = '../demo_opt'
 
     data = []
     for i in os.listdir(import_dir):
@@ -237,16 +237,11 @@ if __name__ == '__main__':
 
         with open(f'{import_dir}/data_dict_{sample_id}.pkl', 'rb') as f:
             data_dict = pickle.load(f)
-            # print(data_dict)
             # print(data_dict['points'].shape)
             # print(data_dict['points'][0])
 
         with open(f'{import_dir}/pred_dicts_{sample_id}.pkl', 'rb') as f:
             pred_dicts = pickle.load(f)
-            # print(pred_dicts)
-            # print(pred_dicts[0]['pred_boxes'][0])
-            # print(pred_dicts[0]['pred_scores'][0])
-            # print(pred_dicts[0]['pred_labels'][0])
         scene = draw_scene(points=data_dict['points'][:, 1:], ref_boxes=pred_dicts[0]['pred_boxes'],
                             ref_scores=pred_dicts[0]['pred_scores'], ref_labels=pred_dicts[0]['pred_labels'],
                             title=sample_id, confidence=0.6)

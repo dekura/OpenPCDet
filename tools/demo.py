@@ -89,7 +89,7 @@ def main():
         dataset_cfg=cfg.DATA_CONFIG, class_names=cfg.CLASS_NAMES, training=False,
         root_path=Path(args.data_path), ext=args.ext, logger=logger
     )
-    logger.info(f'Total number of samples: \t{len(demo_dataset)}')
+    logger.info('Total number of samples: {}'.format(len(demo_dataset)))
 
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=demo_dataset)
     model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=True)
@@ -97,13 +97,12 @@ def main():
     model.eval()
     with torch.no_grad():
         for idx, data_dict in enumerate(demo_dataset):
-            logger.info(f'Visualized sample index: \t{idx + 1}')
+            logger.info('Visualized sample index: {}'.format(idx+1))
             data_dict = demo_dataset.collate_batch([data_dict])
             load_data_to_gpu(data_dict)
             pred_dicts, _ = model.forward(data_dict)
 
             if headless_server:
-
                 # image_name = demo_dataset.sample_file_list[idx].split('/')[-1].replace(demo_dataset.ext, '.png')
                 # image_source_path = image_path / image_name
 
