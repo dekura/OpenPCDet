@@ -90,6 +90,7 @@ def main():
         root_path=Path(args.data_path), ext=args.ext, logger=logger
     )
     logger.info('Total number of samples: {}'.format(len(demo_dataset)))
+    logger.info(args.data_path)
 
     model = build_network(model_cfg=cfg.MODEL, num_class=len(cfg.CLASS_NAMES), dataset=demo_dataset)
     model.load_params_from_file(filename=args.ckpt, logger=logger, to_cpu=True)

@@ -16,14 +16,14 @@ DATA_CONFIG:
             #     'train': 131072,
             #     'test': 131072
             # }
-            NUM_POINTS: {
-                'train': 65536,
-                'test': 700000
-            }
             # NUM_POINTS: {
-            #     'train': 32768,
-            #     'test': 32768
+            #     'train': 65536,
+            #     'test': 700000
             # }
+            NUM_POINTS: {
+                'train': 32768,
+                'test': 32768
+            }
             # NUM_POINTS: {
             #     'train': 16384,
             #     'test': 16384
@@ -31,14 +31,14 @@ DATA_CONFIG:
 
         -   NAME: shuffle_points
             SHUFFLE_ENABLED: {
-                'train': False,
+                'train': True,
                 'test': False
             }
-
             # SHUFFLE_ENABLED: {
-            #     'train': True,
+            #     'train': False,
             #     'test': False
             # }
+
 
 MODEL:
     NAME: PointRCNN
@@ -67,7 +67,7 @@ MODEL:
             BOX_CODER_CONFIG: {
                 'use_mean_size': True,
                 'mean_size': [
-                    [4, 4, 0.9],
+                    [0.86, 1.40, 1],
                     [0.8, 0.6, 1.73],
                     [1.76, 0.6, 1.73]
                 ]
@@ -160,8 +160,8 @@ MODEL:
 
 
 OPTIMIZATION:
-    BATCH_SIZE_PER_GPU: 1
-    NUM_EPOCHS: 150
+    BATCH_SIZE_PER_GPU: 2
+    NUM_EPOCHS: 100
 
     OPTIMIZER: adam_onecycle
     LR: 0.01

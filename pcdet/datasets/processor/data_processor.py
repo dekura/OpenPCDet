@@ -85,10 +85,10 @@ class DataProcessor(object):
         points = data_dict['points']
         if num_points < len(points):
             pts_depth = np.linalg.norm(points[:, 0:3], axis=1)
-            pts_near_flag = pts_depth < 1.0
+            pts_near_flag = pts_depth < 40.0
             far_idxs_choice = np.where(pts_near_flag == 0)[0]
-            print(len(far_idxs_choice))
-            print(num_points)
+            # print(len(far_idxs_choice))
+            # print(num_points)
             near_idxs = np.where(pts_near_flag == 1)[0]
             near_idxs_choice = np.random.choice(near_idxs, num_points - len(far_idxs_choice), replace=False)
             choice = []

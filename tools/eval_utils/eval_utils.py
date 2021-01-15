@@ -9,6 +9,11 @@ from pcdet.models import load_data_to_gpu
 from pcdet.utils import common_utils
 
 
+def debug_obj(obj, obj_name, logger):
+    logger.debug('*************** {} *****************'.format(obj_name))
+    logger.debug(obj)
+
+
 def statistics_info(cfg, ret_dict, metric, disp_dict):
     for cur_thresh in cfg.MODEL.POST_PROCESSING.RECALL_THRESH_LIST:
         metric['recall_roi_%s' % str(cur_thresh)] += ret_dict.get('roi_%s' % str(cur_thresh), 0)
@@ -57,6 +62,12 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
             pred_dicts, ret_dict = model(batch_dict)
         disp_dict = {}
 
+        # debug_obj(pred_dicts, 'pred_dicts', logger)
+        dict_keys = ['frame_id']
+        for key in dict_keys:
+            debug_obj(batch_dict[key], key , logger)
+        debug_obj(ret_dict, 'ret_dict', logger)
+
         statistics_info(cfg, ret_dict, metric, disp_dict)
         annos = dataset.generate_prediction_dicts(
             batch_dict, pred_dicts, class_names,
@@ -74,7 +85,8 @@ def eval_one_epoch(cfg, model, dataloader, epoch_id, logger, dist_test=False, sa
         rank, world_size = common_utils.get_dist_info()
         det_annos = common_utils.merge_results_dist(det_annos, len(dataset), tmpdir=result_dir / 'tmpdir')
         metric = common_utils.merge_results_dist([metric], world_size, tmpdir=result_dir / 'tmpdir')
-
+    logger.debug(metric)
+    # logger.debug(det_annos)
     logger.info('*************** Performance of EPOCH %s *****************' % epoch_id)
     sec_per_example = (time.time() - start_time) / len(dataloader.dataset)
     logger.info('Generate label finished(sec_per_example: %.4f second).' % sec_per_example)
