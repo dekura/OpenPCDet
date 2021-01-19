@@ -22,7 +22,7 @@ python=/home/guojin/miniconda3/envs/pchsd/bin/python
 
 $python  demo.py --cfg_file cfgs/kitti_models/hsd_pointrcnn.yaml \
     --ckpt /home/guojin/projects/pchsd/OpenPCDet/output/cfgs/kitti_models/hsd_pointrcnn/default/ckpt/checkpoint_epoch_200.pth \
-    --data_path /home/guojin/projects/pchsd/OpenPCDet/data/hsd_kitti/training/velodyne/000019.bin \
+    --data_path /home/guojin/projects/pchsd/OpenPCDet/data/hsd_kitti/training/velodyne/000002.bin \
     --output /home/guojin/projects/pchsd/OpenPCDet/demo_opt
 
 

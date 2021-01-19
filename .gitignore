@@ -10,3 +10,4 @@ venv/
 *.zip
 *.bin
 .vscode/
+.DS_Store
