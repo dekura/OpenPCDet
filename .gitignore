@@ -11,3 +11,5 @@ venv/
 *.bin
 .vscode/
 .DS_Store
+output/
+data/
