@@ -13,9 +13,13 @@ import numpy as np
 # fa = np.array([15, 39, 264])
 # t = np.array([1.5, 8.0, 6.5])
 
+# the second version
+# accu = np.array([83.1, 88.4, 100.0])
+# fa = np.array([23, 69, 284])
+# t = np.array([1.6, 8.2, 5.5])
 
 accu = np.array([83.1, 88.4, 100.0])
-fa = np.array([23, 69, 284])
+fa = np.array([36, 89, 294])
 t = np.array([1.6, 8.2, 5.5])
 print('accu: {}'.format(accu))
 print('fa: {}'.format(fa))
